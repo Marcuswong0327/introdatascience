@@ -12,7 +12,7 @@ def predict_stroke(features):
     scaled_features = []
 
     # No scaling for first four features: gender, hypertension, heart_disease, smoking
-    scaled_features.extend([features[key] for key in ['gender', 'hypertension','heart_disease', 'ever_married', 'Residence', 'smoking_status']])
+    scaled_features.extend([features[key] for key in ['gender', 'hypertension','heart_disease', 'ever_married', 'work_type', 'Residence_type', 'smoking_status']])
 
     # Apply scaling for needed features
     for key in features_to_scale:
@@ -33,6 +33,20 @@ def main():
     hypertension = st.selectbox("Hypertension", [0, 1], format_func=lambda x: 'Yes' if x == 1 else 'No')
     heart_disease = st.selectbox("Heart Disease", [0, 1], format_func=lambda x: 'Yes' if x == 1 else 'No')
     ever_married = st.selectbox("Ever Married?", [0, 1], format_func=lambda x: 'Yes' if x == 1 else 'No')
+    work_type_dict = {
+    0: "children",
+    1: "Govt_job",
+    2: "Private",
+    3: "Self-employed",
+    4: "Never_worked"
+}
+
+    work_type = st.selectbox(
+    "Work Type?",
+    options=list(work_type_dict.keys()),
+    format_func=lambda x: work_type_dict[x]
+)
+
     Residence = st.selectbox("Where you live?", [0, 1], format_func=lambda x: 'Urban' if x == 1 else 'Rural')
     smoking_status = st.selectbox("Smoking Status", [0, 1], format_func=lambda x: 'smokes' if x == 1 else 'never smoked')
 
