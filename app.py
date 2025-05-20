@@ -63,12 +63,14 @@ def main():
     'hypertension': hypertension,
     'heart_disease': heart_disease,
     'ever_married': ever_married,
-    'Residence': Residence,
+    'work_type': work_type,            
+    'Residence_type': Residence,         
     'smoking_status': smoking_status,
     'bmi': bmi,
     'age': age,
     'avg_glucose_level': glucose
 }
+
 
 
     if st.button("Predict"):
