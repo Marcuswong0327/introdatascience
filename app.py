@@ -112,6 +112,8 @@ def main():
     result = predict_stroke(features)
     if result == 1:
         st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly.")
+    elif bmi > 24.9 or age > 60 or glucose > 140:
+        st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly.")
     else:
         st.success("🟢 No predicted risk of stroke. Keep maintaining healthy habits!")
 
