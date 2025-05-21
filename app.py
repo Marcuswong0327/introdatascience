@@ -100,18 +100,15 @@ def main():
 
 
     if st.button("Predict"):
-    # Show personalized advice first
+        # Show personalized advice first
         advices = advice_on_values(age, bmi, glucose)
-    for adv in advices:
-        st.info(adv)
+        for adv in advices:
+            st.info(adv)
 
-    # Then run prediction
-    result = predict_stroke(features)
-    if result == 1:
-        st.error("🔴 You may have Stroke.")
-    else:
-        st.success("🟢 You are not predicted to have Stroke.")
+        # Then run prediction
+        result = predict_stroke(features)
+        if result == 1:
+            st.error("🔴 You may have Stroke.")
+        else:
+            st.success("🟢 You are not predicted to have Stroke.")
 
-
-if __name__ == '__main__':
-    main()
