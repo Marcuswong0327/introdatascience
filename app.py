@@ -106,18 +106,45 @@ def main():
         st.error("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
         st.error("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
         st.error("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
-    elif result ==1 and age > 60: 
+    elif result ==1 and age > 60 and glucose > 140: 
         st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly. ")
         st.error("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
-    elif result ==1 and glucose > 140: 
+        st.error("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
+    elif result ==1 and age > 60 and bmi > 24.9: 
+        st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly. ")
+        st.error("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
+        st.error("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
+    elif result ==1 and glucose > 140 and bmi > 24.9: 
         st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly. ")
         st.error("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
+        st.error("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
     elif result == 1 and bmi > 24.9:
         st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly. ")
         st.error("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
+    elif result == 1 and glucose > 140:
+        st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly. ")
+        st.error("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
+    elif result == 1 and age > 60:
+        st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly. ")
+        st.error("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
+    elif result == 1:
+        st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly. ")
+
     elif age > 60 and glucose > 140 and bmi > 24.9: 
         st.success("🟢 No predicted risk of stroke.")
         st.success("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
+        st.success("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
+        st.success("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
+    elif age > 60 and glucose > 140:
+        st.success("🟢 No predicted risk of stroke.")
+        st.success("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
+        st.success("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
+    elif age > 60 and bmi > 24.9:
+        st.success("🟢 No predicted risk of stroke.")
+        st.success("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
+        st.success("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
+    elif glucose > 140 and bmi > 24.9:
+        st.success("🟢 No predicted risk of stroke.")
         st.success("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
         st.success("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
     elif age > 60:
