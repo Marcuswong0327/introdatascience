@@ -23,6 +23,34 @@ def predict_stroke(features):
     prediction = model.predict([scaled_features])[0]
     return prediction
 
+def advice_on_values(age, bmi, glucose):
+    advice = []
+
+    # Age advice
+    if age < 0 or age > 120:
+        advice.append("❗ Invalid age input, please enter between 0 and 120.")
+    elif age > 60:
+        advice.append("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
+
+    # BMI advice
+    if bmi < 10 or bmi > 60:
+        advice.append("❗ BMI input seems off, please double-check.")
+    elif bmi < 18.5:
+        advice.append("⚠️ BMI is low, consider improving nutrition and gaining healthy weight.")
+    elif bmi > 24.9:
+        advice.append("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
+
+    # Blood glucose advice
+    if glucose < 30 or glucose > 500:
+        advice.append("❗ Blood glucose value abnormal, please verify your input.")
+    elif glucose > 140:
+        advice.append("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
+
+    if not advice:
+        advice.append("✅ All your health indicators look good! Keep up the healthy lifestyle!")
+
+    return advice
+
 
 # Streamlit UI
 def main():
@@ -75,11 +103,17 @@ def main():
 
 
     if st.button("Predict"):
-        result = predict_stroke(features)
-        if result == 1:
-            st.error("🔴 You may have Stroke.")
-        else:
-            st.success("🟢 You are not predicted to have Stroke.")
+    # Show personalized advice first
+        advices = advice_on_values(age, bmi, glucose)
+        for adv in advices:
+            st.info(adv)
+
+    # Then run prediction
+    result = predict_stroke(features)
+    if result == 1:
+        st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly.")
+    else:
+        st.success("🟢 No predicted risk of stroke. Keep maintaining healthy habits!")
 
 if __name__ == '__main__':
     main()
