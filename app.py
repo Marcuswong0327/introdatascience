@@ -8,20 +8,29 @@ scalers = joblib.load('scalers.pkl')  # Expected to be a dict with keys like 'bm
 
 # Define prediction function
 def predict_stroke(features):
-    features_to_scale = ['bmi', 'age', 'avg_glucose_level']
-    scaled_features = []
+    try:
+        features_to_scale = ['bmi', 'age', 'avg_glucose_level']
+        scaled_features = []
 
-    # No scaling for first four features: gender, hypertension, heart_disease, smoking
-    scaled_features.extend([features[key] for key in ['gender', 'hypertension','heart_disease', 'ever_married', 'work_type', 'Residence_type', 'smoking_status']])
+        # Non-scaled features
+        scaled_features.extend([features[key] for key in [
+            'gender', 'hypertension', 'heart_disease',
+            'ever_married', 'work_type', 'Residence_type', 'smoking_status'
+        ]])
 
-    # Apply scaling for needed features
-    for key in features_to_scale:
-        scaler = scalers[key]
-        scaled_value = scaler.transform(np.array([[features[key]]]))[0][0]
-        scaled_features.append(scaled_value)
+        # Scaled features
+        for key in features_to_scale:
+            scaler = scalers[key]
+            scaled_value = scaler.transform(np.array([[features[key]]]))[0][0]
+            scaled_features.append(scaled_value)
 
-    prediction = model.predict([scaled_features])[0]
-    return prediction
+        prediction = model.predict([scaled_features])[0]
+        return prediction
+    
+    except Exception as e:
+        print(f"Prediction error: {e}")
+        return -1  # or raise Exception(e)
+
 
 def advice_on_values(age, bmi, glucose):
     advice = []
