@@ -119,7 +119,7 @@ def main():
         st.success("🟢 No predicted risk of stroke.")
         st.success("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
         st.success("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
-        st.sucess("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
+        st.success("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
     elif age > 60:
         st.success("🟢 No predicted risk of stroke.")
         st.success("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
