@@ -46,9 +46,6 @@ def advice_on_values(age, bmi, glucose):
     elif glucose > 140:
         advice.append("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
 
-    if not advice:
-        advice.append("✅ All your health indicators look good! Keep up the healthy lifestyle!")
-
     return advice
 
 
@@ -112,10 +109,8 @@ def main():
     result = predict_stroke(features)
     if result == 1:
         st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly.")
-    elif bmi > 24.9 or age > 60 or glucose > 140:
-        st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly.")
     else:
-        st.success("🟢 No predicted risk of stroke. Keep maintaining healthy habits!")
+        st.success("🟢 No predicted risk of stroke. Kindly maintain or improve your lifestyle if you're senior citizen, high bmi and high glucose level.")
 
 if __name__ == '__main__':
     main()
