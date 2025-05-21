@@ -8,54 +8,20 @@ scalers = joblib.load('scalers.pkl')  # Expected to be a dict with keys like 'bm
 
 # Define prediction function
 def predict_stroke(features):
-    try:
-        features_to_scale = ['bmi', 'age', 'avg_glucose_level']
-        scaled_features = []
+    features_to_scale = ['bmi', 'age', 'avg_glucose_level']
+    scaled_features = []
 
-        # Non-scaled features
-        scaled_features.extend([features[key] for key in [
-            'gender', 'hypertension', 'heart_disease',
-            'ever_married', 'work_type', 'Residence_type', 'smoking_status'
-        ]])
+    # No scaling for first four features: gender, hypertension, heart_disease, smoking
+    scaled_features.extend([features[key] for key in ['gender', 'hypertension','heart_disease', 'ever_married', 'work_type', 'Residence_type', 'smoking_status']])
 
-        # Scaled features
-        for key in features_to_scale:
-            scaler = scalers[key]
-            scaled_value = scaler.transform(np.array([[features[key]]]))[0][0]
-            scaled_features.append(scaled_value)
+    # Apply scaling for needed features
+    for key in features_to_scale:
+        scaler = scalers[key]
+        scaled_value = scaler.transform(np.array([[features[key]]]))[0][0]
+        scaled_features.append(scaled_value)
 
-        prediction = model.predict([scaled_features])[0]
-        return prediction
-    
-    except Exception as e:
-        print(f"Prediction error: {e}")
-        return -1  # or raise Exception(e)
-
-
-def advice_on_values(age, bmi, glucose):
-    advice = []
-
-    if age < 0 or age > 120:
-        advice.append("❗ Invalid age input, please enter between 0 and 120.")
-    elif age > 60:
-        advice.append("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
-
-    if bmi < 10 or bmi > 60:
-        advice.append("❗ BMI input seems off, please double-check.")
-    elif bmi < 18.5:
-        advice.append("⚠️ BMI is low, consider improving nutrition and gaining healthy weight.")
-    elif bmi > 24.9:
-        advice.append("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
-
-    if glucose < 30 or glucose > 500:
-        advice.append("❗ Blood glucose value abnormal, please verify your input.")
-    elif glucose > 140:
-        advice.append("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
-
-    if not advice:
-        advice.append("✅ All your health indicators look good! Keep up the healthy lifestyle!")
-
-    return advice
+    prediction = model.predict([scaled_features])[0]
+    return prediction
 
 
 # Streamlit UI
@@ -83,7 +49,7 @@ def main():
 )
 
     Residence = st.selectbox("Where you live?", [0, 1], format_func=lambda x: 'Urban' if x == 1 else 'Rural')
-    smoking_status = st.selectbox("Smoking Status", [0, 1], format_func=lambda x: 'smokes/formarly smokes' if x == 1 else 'never smoked')
+    smoking_status = st.selectbox("Smoking Status", [0, 1], format_func=lambda x: 'smokes/formerly smoked' if x == 1 else 'never smoked')
 
     bmi = st.number_input("BMI (Body Mass Index)", min_value=0.0, step=0.1)
     age = st.number_input("Age", min_value=0, step=1)
@@ -109,15 +75,11 @@ def main():
 
 
     if st.button("Predict"):
-        # Show personalized advice first
-        advices = advice_on_values(age, bmi, glucose)
-        for adv in advices:
-            st.info(adv)
-
-        # Then run prediction
         result = predict_stroke(features)
         if result == 1:
             st.error("🔴 You may have Stroke.")
         else:
             st.success("🟢 You are not predicted to have Stroke.")
 
+if __name__ == '__main__':
+    main()
