@@ -1,9 +1,11 @@
-plotly.express
-matplotlib
-pandas
-numpy
 streamlit
+numpy
+pandas
+matplotlib
 seaborn
 plotly
-streamlit_extras
-
+scikit-learn
+xgboost
+lightgbm
+imbalanced-learn
+joblib
