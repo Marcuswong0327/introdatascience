@@ -93,8 +93,8 @@ def main():
 
     if st.button("Predict"):
     # Show personalized advice first
-        advice = advice_on_values(age, bmi, glucose)
-    for adv in advice:
+        advices = advice_on_values(age, bmi, glucose)
+    for adv in advices:
         st.info(adv)
 
     # Run prediction and get probability
