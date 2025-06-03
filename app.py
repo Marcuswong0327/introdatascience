@@ -91,73 +91,47 @@ def main():
     'avg_glucose_level': glucose
 }
 
-
-
     if st.button("Predict"):
     # Show personalized advice first
         advices = advice_on_values(age, bmi, glucose)
-        for adv in advices:
-            st.info(adv)
+    for adv in advices:
+        st.info(adv)
 
-    # Then run prediction
-    result = predict_stroke(features)
-    if result == 1 and glucose > 140 and age > 60 and bmi > 24.9:
-        st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly. ")
-        st.error("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
-        st.error("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
-        st.error("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
-    elif result ==1 and age > 60 and glucose > 140: 
-        st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly. ")
-        st.error("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
-        st.error("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
-    elif result ==1 and age > 60 and bmi > 24.9: 
-        st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly. ")
-        st.error("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
-        st.error("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
-    elif result ==1 and glucose > 140 and bmi > 24.9: 
-        st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly. ")
-        st.error("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
-        st.error("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
-    elif result == 1 and bmi > 24.9:
-        st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly. ")
-        st.error("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
-    elif result == 1 and glucose > 140:
-        st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly. ")
-        st.error("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
-    elif result == 1 and age > 60:
-        st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly. ")
-        st.error("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
-    elif result == 1:
-        st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly. ")
+    # Run prediction and get probability
+    features_to_scale = ['bmi', 'age', 'avg_glucose_level']
+    scaled_features = []
+    scaled_features.extend([features[key] for key in ['gender', 'hypertension','heart_disease', 'ever_married', 'work_type', 'Residence_type', 'smoking_status']])
 
-    elif age > 60 and glucose > 140 and bmi > 24.9: 
-        st.success("🟢 No predicted risk of stroke.")
-        st.success("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
-        st.success("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
-        st.success("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
-    elif age > 60 and glucose > 140:
-        st.success("🟢 No predicted risk of stroke.")
-        st.success("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
-        st.success("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
-    elif age > 60 and bmi > 24.9:
-        st.success("🟢 No predicted risk of stroke.")
-        st.success("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
-        st.success("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
-    elif glucose > 140 and bmi > 24.9:
-        st.success("🟢 No predicted risk of stroke.")
-        st.success("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
-        st.success("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
-    elif age > 60:
-        st.success("🟢 No predicted risk of stroke.")
-        st.success("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
-    elif glucose > 140:
-        st.success("🟢 No predicted risk of stroke.")
-        st.success("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
-    elif bmi > 24.9:
-        st.success("🟢 No predicted risk of stroke.")
-        st.success("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
+    for key in features_to_scale:
+        scaler = scalers[key]
+        scaled_value = scaler.transform(np.array([[features[key]]]))[0][0]
+        scaled_features.append(scaled_value)
+
+    prediction = model.predict([scaled_features])[0]
+    prob = model.predict_proba([scaled_features])[0][1]
+
+    # Display probability
+    st.subheader("📊 Stroke Risk Prediction")
+    st.metric("🧠 Stroke Probability", f"{prob:.2%}")
+    
+    if prediction == 1:
+        st.error("🔴 You may have a risk of stroke. Please consult a doctor promptly.")
+        if age > 60:
+            st.error("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
+        if glucose > 140:
+            st.error("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
+        if bmi > 24.9:
+            st.error("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
     else:
-        st.success("🟢 No predicted risk of stroke. Good Job!!! Keep maintaining healthly lifestyle!")
+        st.success("🟢 No predicted risk of stroke.")
+        if age > 60:
+            st.warning("⚠️ Older age detected, please monitor cardiovascular health and get regular check-ups.")
+        if glucose > 140:
+            st.warning("⚠️ Elevated blood glucose, watch your diet and monitor for diabetes risk.")
+        if bmi > 24.9:
+            st.warning("⚠️ BMI is high, recommend diet control and increased exercise to reduce obesity risk.")
+        if age <= 60 and glucose <= 140 and bmi <= 24.9:
+            st.success("✅ Great job maintaining a healthy lifestyle!")
 
 if __name__ == '__main__':
     main()
