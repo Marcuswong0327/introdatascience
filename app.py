@@ -106,7 +106,7 @@ def main():
         st.markdown("This explains how each input contributed to the prediction.")
 
         try:
-            explainer = shap.Explainer(model.named_estimators_['final_estimator'], feature_array)
+            explainer = shap.Explainer(model.named_estimators_['rf'], feature_array)
         except:
             explainer = shap.Explainer(model, feature_array)
 
