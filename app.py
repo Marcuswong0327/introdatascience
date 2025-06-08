@@ -114,7 +114,8 @@ def main():
 
        
         shap.plots.waterfall(shap_values[0], show=False)
-        st.pyplot(bbox_inches='tight')
+        fig = plt.gcf() 
+        st.pyplot(fig)  
 
 if __name__ == '__main__':
     main()
