@@ -5,8 +5,8 @@ import shap
 import matplotlib.pyplot as plt
 
 # Load the trained model and per-feature scalers
-model = joblib.load("/mnt/data/stacking_classifier_model.pkl")
-scalers = joblib.load("/mnt/data/scalers.pkl")  # Dict with 'age', 'bmi', 'avg_glucose_level'
+model = joblib.load("stacking_classifier_model.pkl")
+scalers = joblib.load("scalers.pkl")  # Dict with 'age', 'bmi', 'avg_glucose_level'
 
 # --- Helper functions ---
 def predict_stroke(features):
